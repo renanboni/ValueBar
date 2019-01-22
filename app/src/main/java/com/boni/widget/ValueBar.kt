@@ -100,8 +100,18 @@ class ValueBar @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec))
+    }
 
+    private fun measureWidth(measureSpec: Int): Int {
+        val size = paddingLeft + paddingRight
+        return resolveSizeAndState(size, measureSpec, 0)
+    }
 
+    private fun measureHeight(measureSpec: Int): Int {
+        var size = (paddingTop + paddingBottom).toFloat()
+        size += Math.max(barHeight, circleRadius * 2)
+        return resolveSizeAndState(size.toInt(), measureSpec, 0)
     }
 
     private fun drawBar(canvas: Canvas) {
@@ -129,6 +139,4 @@ class ValueBar @JvmOverloads constructor(
     }
 
     private fun getBarCenter() = (barHeight - paddingTop - paddingBottom) * .5f
-
-
 }
