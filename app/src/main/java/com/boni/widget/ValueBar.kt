@@ -2,14 +2,11 @@ package com.boni.widget
 
 import android.content.Context
 import android.graphics.*
-import android.graphics.Paint.*
+import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.MotionEvent.*
 import android.view.View
 import com.boni.valuebar.R
-import android.R.attr.isIndicator
-
 
 
 class ValueBar @JvmOverloads constructor(
@@ -20,7 +17,14 @@ class ValueBar @JvmOverloads constructor(
     View(context, attrs, defStyleAttr) {
 
     private var maxValue = 100
-    private var currentValue = 10
+    private var minValue = 0
+    set(value) {
+        if(value >= 0) {
+            field = value
+        }
+    }
+
+    private var currentValue = 0
 
     // Dimensions
     private var barHeight: Int = 20
@@ -35,10 +39,13 @@ class ValueBar @JvmOverloads constructor(
     private var circlePaint: Paint
     private var fillPaint: Paint
 
-    //
+    // Current circle position
     private var currentPosition: Float = 0f
 
     private var circleRect: Rect
+
+    // Listener
+    private var valueBarListener: ValueBarListener? = null
 
     init {
         val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ValueBar, 0, 0)
@@ -75,27 +82,36 @@ class ValueBar @JvmOverloads constructor(
             when(event.action) {
                 ACTION_DOWN -> {
                     if(circleRect.contains(x.toInt(), y.toInt())) {
-                        if(x > circleRadius) {
+                        if(x  - circleRadius >= 0) {
                             currentPosition = x
                             invalidate()
                         }
                     }
                 }
                 ACTION_UP -> {
-                    if(x >= circleRadius && x <= width - circleRadius) {
+                    if(x - circleRadius >= 0 && x <= width - circleRadius) {
                         currentPosition = x
                         invalidate()
                     }
                 }
                 ACTION_MOVE -> {
-                    if(x >= circleRadius && x <= width - circleRadius) {
+                    if(x >= 0 && x <= width) {
                         currentPosition = x
+
+                        updateCurrentValue()
                         invalidate()
                     }
                 }
             }
             true
         }
+    }
+
+    private fun updateCurrentValue() {
+        val currentPercent = currentPosition / width
+        currentValue = Math.round((currentPercent * (maxValue - minValue) + minValue))
+
+        valueBarListener?.onValueChanged(currentValue)
     }
 
     override fun onDraw(canvas: Canvas) {

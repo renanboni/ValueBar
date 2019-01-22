@@ -11,11 +11,8 @@
             app:barHeight="20dp"
             app:baseColor="#CECECE"
             app:circleRadius="16dp"
-            android:layout_centerVertical="true"
             app:fillColor="@android:color/holo_blue_bright"
             app:circleColor="@android:color/holo_blue_bright"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 </RelativeLayout>
