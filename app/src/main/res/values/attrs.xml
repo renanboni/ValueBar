@@ -5,5 +5,6 @@
         <attr name="circleRadius" format="dimension"/>
         <attr name="baseColor" format="color" />
         <attr name="circleColor" format="color"/>
+        <attr name="fillColor" format="color"/>
     </declare-styleable>
 </resources>

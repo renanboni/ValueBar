@@ -8,9 +8,10 @@
         tools:context=".MainActivity">
 
     <com.boni.widget.ValueBar
-            app:barHeight="40dp"
+            app:barHeight="20dp"
             app:baseColor="#CECECE"
-            app:circleRadius="10dp"
+            app:circleRadius="8dp"
+            app:fillColor="@android:color/holo_blue_bright"
             app:circleColor="@android:color/holo_blue_bright"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

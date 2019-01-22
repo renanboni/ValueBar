@@ -29,9 +29,11 @@ class ValueBar @JvmOverloads constructor(
     // Colors
     private var baseColor: Int = 0
     private var circleColor: Int = 0
+    private var fillColor: Int = 0
 
     private var barBasePaint: Paint
     private var circlePaint: Paint
+    private var fillPaint: Paint
 
     //
     private var currentPosition: Float = 0f
@@ -46,6 +48,7 @@ class ValueBar @JvmOverloads constructor(
             baseColor = getColor(R.styleable.ValueBar_baseColor, Color.BLACK)
             circleColor = getColor(R.styleable.ValueBar_circleColor, Color.BLACK)
             circleRadius = getDimensionPixelSize(R.styleable.ValueBar_circleRadius, 20)
+            fillColor = getColor(R.styleable.ValueBar_fillColor, Color.BLACK)
         }
 
         typedArray.recycle()
@@ -56,6 +59,10 @@ class ValueBar @JvmOverloads constructor(
 
         circlePaint = Paint(ANTI_ALIAS_FLAG).also {
             it.color = circleColor
+        }
+
+        fillPaint = Paint(ANTI_ALIAS_FLAG).also {
+            it.color = fillColor
         }
 
         circleRect = Rect(currentPosition.toInt(), 0, circleRadius * 2, circleRadius * 2)
@@ -80,7 +87,6 @@ class ValueBar @JvmOverloads constructor(
                     invalidate()
                 }
             }
-
             true
         }
     }
@@ -112,6 +118,9 @@ class ValueBar @JvmOverloads constructor(
 
         val rectF = RectF(left.toFloat(), top, right.toFloat(), bottom)
         canvas.drawRoundRect(rectF, halfBarHeight, halfBarHeight, barBasePaint)
+
+        val fillRectF = RectF(left.toFloat(), top, currentPosition, bottom)
+        canvas.drawRoundRect(fillRectF, halfBarHeight, halfBarHeight, fillPaint)
     }
 
     private fun drawCircle(canvas: Canvas) {
