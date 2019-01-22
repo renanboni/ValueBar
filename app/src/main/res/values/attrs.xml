@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ValueBar">
+        <attr name="barHeight" format="dimension"/>
+        <attr name="circleRadius" format="dimension"/>
+        <attr name="baseColor" format="color" />
+        <attr name="circleColor" format="color"/>
+    </declare-styleable>
+</resources>
