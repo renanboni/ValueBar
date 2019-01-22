@@ -65,6 +65,7 @@ class ValueBar @JvmOverloads constructor(
             it.color = fillColor
         }
 
+        currentPosition = circleRadius.toFloat()
         circleRect = Rect(currentPosition.toInt(), 0, circleRadius * 2, circleRadius * 2)
 
         setOnTouchListener { _ , event ->
@@ -74,17 +75,23 @@ class ValueBar @JvmOverloads constructor(
             when(event.action) {
                 ACTION_DOWN -> {
                     if(circleRect.contains(x.toInt(), y.toInt())) {
+                        if(x > circleRadius) {
+                            currentPosition = x
+                            invalidate()
+                        }
+                    }
+                }
+                ACTION_UP -> {
+                    if(x >= circleRadius && x <= width - circleRadius) {
                         currentPosition = x
                         invalidate()
                     }
                 }
-                ACTION_UP -> {
-                    currentPosition = x
-                    invalidate()
-                }
                 ACTION_MOVE -> {
-                    currentPosition = x
-                    invalidate()
+                    if(x >= circleRadius && x <= width - circleRadius) {
+                        currentPosition = x
+                        invalidate()
+                    }
                 }
             }
             true
@@ -99,7 +106,6 @@ class ValueBar @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec))
     }
 
@@ -109,9 +115,8 @@ class ValueBar @JvmOverloads constructor(
     }
 
     private fun measureHeight(measureSpec: Int): Int {
-        var size = (paddingTop + paddingBottom).toFloat()
-        size += Math.max(barHeight, circleRadius * 2)
-        return resolveSizeAndState(size.toInt(), measureSpec, 0)
+        val size = paddingTop + paddingBottom + Math.max(barHeight, circleRadius * 2)
+        return resolveSizeAndState(size, measureSpec, 0)
     }
 
     private fun drawBar(canvas: Canvas) {
@@ -119,24 +124,24 @@ class ValueBar @JvmOverloads constructor(
 
         val barCenter = getBarCenter()
 
-        val halfBarHeight = barCenter * .5f
+        val halfBarHeight = barCenter * 0.5f
 
         val top = barCenter - halfBarHeight
         val bottom = barCenter + halfBarHeight
-        val left = paddingLeft
-        val right = barWidth + paddingRight
+        val left = paddingLeft.toFloat()
+        val right = (barWidth + paddingRight).toFloat()
 
-        val rectF = RectF(left.toFloat(), top, right.toFloat(), bottom)
+        val rectF = RectF(left, top, right, bottom)
         canvas.drawRoundRect(rectF, halfBarHeight, halfBarHeight, barBasePaint)
 
-        val fillRectF = RectF(left.toFloat(), top, currentPosition, bottom)
+        val fillRectF = RectF(left, top, currentPosition, bottom)
         canvas.drawRoundRect(fillRectF, halfBarHeight, halfBarHeight, fillPaint)
     }
 
     private fun drawCircle(canvas: Canvas) {
         circleRect.left = currentPosition.toInt()
-        canvas.drawCircle(currentPosition, getBarCenter(), (circleRadius * 2).toFloat(), circlePaint)
+        canvas.drawCircle(currentPosition, getBarCenter(), circleRadius.toFloat(), circlePaint)
     }
 
-    private fun getBarCenter() = (barHeight - paddingTop - paddingBottom) * .5f
+    private fun getBarCenter() = (height - paddingTop - paddingBottom) * .5f
 }
