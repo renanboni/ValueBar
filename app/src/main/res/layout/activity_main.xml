@@ -8,11 +8,26 @@
         tools:context=".MainActivity">
 
     <com.boni.widget.ValueBar
+            android:id="@+id/valuebar"
             app:barHeight="20dp"
             app:baseColor="#CECECE"
             app:circleRadius="16dp"
+            app:maxValue="200"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             app:fillColor="@android:color/holo_blue_bright"
             app:circleColor="@android:color/holo_blue_bright"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/valuebarText"
+            android:layout_below="@+id/valuebar"
+            android:textSize="24sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            tools:text="TESTE"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 </RelativeLayout>

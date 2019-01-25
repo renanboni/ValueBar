@@ -3,6 +3,7 @@
     <declare-styleable name="ValueBar">
         <attr name="barHeight" format="dimension"/>
         <attr name="circleRadius" format="dimension"/>
+        <attr name="maxValue" format="integer"/>
         <attr name="baseColor" format="color" />
         <attr name="circleColor" format="color"/>
         <attr name="fillColor" format="color"/>

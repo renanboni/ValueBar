@@ -45,7 +45,11 @@ class ValueBar @JvmOverloads constructor(
     private var circleRect: Rect
 
     // Listener
-    private var valueBarListener: ValueBarListener? = null
+    var valueBarListener: ValueBarListener? = null
+
+    interface ValueBarListener {
+        fun onValueChanged(value: Int)
+    }
 
     init {
         val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ValueBar, 0, 0)
@@ -56,6 +60,7 @@ class ValueBar @JvmOverloads constructor(
             circleColor = getColor(R.styleable.ValueBar_circleColor, Color.BLACK)
             circleRadius = getDimensionPixelSize(R.styleable.ValueBar_circleRadius, 20)
             fillColor = getColor(R.styleable.ValueBar_fillColor, Color.BLACK)
+            maxValue = getInt(R.styleable.ValueBar_maxValue, 0)
         }
 
         typedArray.recycle()
@@ -89,13 +94,13 @@ class ValueBar @JvmOverloads constructor(
                     }
                 }
                 ACTION_UP -> {
-                    if(x - circleRadius >= 0 && x <= width - circleRadius) {
+                    if(isValidMoviment(x)) {
                         currentPosition = x
                         invalidate()
                     }
                 }
                 ACTION_MOVE -> {
-                    if(x >= 0 && x <= width) {
+                    if(isValidMoviment(x)) {
                         currentPosition = x
 
                         updateCurrentValue()
@@ -106,6 +111,8 @@ class ValueBar @JvmOverloads constructor(
             true
         }
     }
+
+    private fun isValidMoviment(position: Float) = position >= 0 && position <= width
 
     private fun updateCurrentValue() {
         val currentPercent = currentPosition / width
